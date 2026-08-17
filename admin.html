@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Shopping Corner Admin</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f4f6;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:white;
+padding:16px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:20;
+}
+
+.logo{
+font-size:20px;
+font-weight:bold;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 3px 15px #0001;
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:12px;
+margin:7px 0 15px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:15px;
+}
+
+button{
+border:0;
+padding:12px 16px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.login{
+background:#4f46e5;
+color:white;
+width:100%;
+}
+
+.add{
+background:#16a34a;
+color:white;
+width:100%;
+}
+
+.logout{
+background:#dc2626;
+color:white;
+}
+
+.delete{
+background:#dc2626;
+color:white;
+}
+
+.edit{
+background:#4f46e5;
+color:white;
+}
+
+.hideBtn{
+background:#f59e0b;
+color:white;
+}
+
+.showBtn{
+background:#16a34a;
+color:white;
+}
+
+.save{
+background:#16a34a;
+color:white;
+width:100%;
+}
+
+.cancel{
+background:#6b7280;
+color:white;
+width:100%;
+margin-top:8px;
+}
+
+.hidden{
+display:none;
+}
+
+.preview{
+display:flex;
+gap:10px;
+overflow-x:auto;
+margin:10px 0;
+}
+
+.preview img{
+width:100px;
+height:100px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.product{
+border:1px solid #ddd;
+padding:15px;
+border-radius:12px;
+margin:10px 0;
+}
+
+.product.hiddenProduct{
+opacity:.55;
+}
+
+.productTitle{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center;
+}
+
+.productStatus{
+padding:5px 9px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+background:#dcfce7;
+color:#166534;
+}
+
+.productStatus.off{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.images{
+display:flex;
+gap:8px;
+overflow-x:auto;
+margin:12px 0;
+}
+
+.images img{
+width:100px;
+height:100px;
+object-fit:cover;
+border-radius:8px;
+}
+
+.productActions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.search{
+margin-bottom:10px;
+}
+
+.order{
+border:1px solid #ddd;
+padding:15px;
+border-radius:10px;
+margin:10px 0;
+}
+
+.orderHeader{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.status{
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+.status-new{
+background:#dbeafe;
+color:#1e40af;
+}
+
+.status-processing{
+background:#fef3c7;
+color:#92400e;
+}
+
+.status-shipped{
+background:#e0e7ff;
+color:#3730a3;
+}
+
+.status-delivered{
+background:#dcfce7;
+color:#166534;
+}
+
+.status-cancelled{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.orderItems{
+background:#f9fafb;
+padding:12px;
+border-radius:8px;
+margin-top:12px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.stat{
+background:white;
+padding:20px;
+border-radius:14px;
+box-shadow:0 3px 12px #0001;
+}
+
+.statNumber{
+font-size:28px;
+font-weight:bold;
+margin-top:8px;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#0008;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:100;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modalBox{
+background:white;
+width:600px;
+max-width:100%;
+max-height:90vh;
+overflow:auto;
+padding:22px;
+border-radius:15px;
+}
+
+.editImages{
+display:flex;
+gap:8px;
+overflow-x:auto;
+margin-bottom:15px;
+}
+
+.editImages div{
+position:relative;
+flex:0 0 auto;
+}
+
+.editImages img{
+width:90px;
+height:90px;
+object-fit:cover;
+border-radius:8px;
+}
+
+.removeImage{
+position:absolute;
+top:3px;
+right:3px;
+background:#dc2626;
+color:white;
+padding:4px 7px;
+border-radius:50%;
+font-size:12px;
+}
+
+.empty{
+padding:20px;
+text-align:center;
+color:#6b7280;
+}
+
+@media(max-width:600px){
+
+.container{
+padding:12px;
+}
+
+.productTitle{
+align-items:flex-start;
+}
+
+.productActions button{
+width:100%;
+}
+
+header{
+padding:14px;
+}
+
+.logo{
+font-size:17px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+🛍️ Shopping Corner Admin
+</div>
+
+<button
+class="logout hidden"
+id="logoutBtn"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</header>
+
+
+<!-- LOGIN -->
+
+<div
+class="container"
+id="loginPage">
+
+<div class="card">
+
+<h2>🔐 Admin Login</h2>
+
+<input
+id="email"
+type="email"
+placeholder="Admin Email">
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+<button
+class="login"
+onclick="login()">
+
+Login
+
+</button>
+
+<p id="loginMessage"></p>
+
+</div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div
+class="container hidden"
+id="dashboard">
+
+
+<!-- STATS -->
+
+<div class="stats">
+
+<div class="stat">
+
+<div>📦 Products</div>
+
+<div
+class="statNumber"
+id="productCount">
+
+0
+
+</div>
+
+</div>
+
+<div class="stat">
+
+<div>🛍️ Orders</div>
+
+<div
+class="statNumber"
+id="orderCount">
+
+0
+
+</div>
+
+</div>
+
+<div class="stat">
+
+<div>🆕 New Orders</div>
+
+<div
+class="statNumber"
+id="newOrderCount">
+
+0
+
+</div>
+
+</div>
+
+<div class="stat">
+
+<div>💰 Total Sales</div>
+
+<div
+class="statNumber"
+id="salesTotal">
+
+Rs. 0
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ADD PRODUCT -->
+
+<div class="card">
+
+<h2>➕ Add Product</h2>
+
+<label>Product Name</label>
+
+<input
+id="productName"
+placeholder="Example: Wireless Headphones">
+
+
+<label>Price (Rs.)</label>
+
+<input
+id="productPrice"
+type="number"
+placeholder="2500">
+
+
+<label>Category</label>
+
+<input
+id="productCategory"
+placeholder="Electronics">
+
+
+<label>Emoji</label>
+
+<input
+id="productEmoji"
+placeholder="🎧">
+
+
+<label>Description</label>
+
+<textarea
+id="productDescription"
+rows="4"
+placeholder="Product description">
+</textarea>
+
+
+<label>
+📸 Product Pictures
+</label>
+
+<input
+id="productImages"
+type="file"
+accept="image/jpeg,image/png,image/webp"
+multiple
+onchange="previewImages()">
+
+
+<div
+id="imagePreview"
+class="preview">
+</div>
+
+
+<button
+class="add"
+onclick="addProduct()">
+
+➕ Upload Product
+
+</button>
+
+<p id="addMessage"></p>
+
+</div>
+
+
+<!-- PRODUCTS -->
+
+<div class="card">
+
+<h2>📦 Your Products</h2>
+
+<input
+class="search"
+id="productSearch"
+placeholder="🔎 Search products..."
+oninput="renderProducts()">
+
+<div id="products">
+Loading...
+</div>
+
+</div>
+
+
+<!-- ORDERS -->
+
+<div class="card">
+
+<h2>🛍️ Customer Orders</h2>
+
+<input
+class="search"
+id="orderSearch"
+placeholder="🔎 Search order, name, phone..."
+oninput="renderOrders()">
+
+
+<select
+id="orderFilter"
+onchange="renderOrders()">
+
+<option value="all">
+All Orders
+</option>
+
+<option value="new">
+New
+</option>
+
+<option value="processing">
+Processing
+</option>
+
+<option value="shipped">
+Shipped
+</option>
+
+<option value="delivered">
+Delivered
+</option>
+
+<option value="cancelled">
+Cancelled
+</option>
+
+</select>
+
+
+<div id="orders">
+Loading...
+</div>
+
+</div>
+
+</div>
+
+
+<!-- EDIT PRODUCT MODAL -->
+
+<div
+class="modal"
+id="editModal">
+
+<div class="modalBox">
+
+<h2>✏️ Edit Product</h2>
+
+<input
+type="hidden"
+id="editProductId">
+
+
+<label>Product Name</label>
+
+<input
+id="editName">
+
+
+<label>Price (Rs.)</label>
+
+<input
+id="editPrice"
+type="number">
+
+
+<label>Category</label>
+
+<input
+id="editCategory">
+
+
+<label>Emoji</label>
+
+<input
+id="editEmoji">
+
+
+<label>Description</label>
+
+<textarea
+id="editDescription"
+rows="4">
+</textarea>
+
+
+<label>
+Current Images
+</label>
+
+<div
+id="editImages"
+class="editImages">
+</div>
+
+
+<label>
+📸 Add New Images
+</label>
+
+<input
+id="editImageFiles"
+type="file"
+accept="image/jpeg,image/png,image/webp"
+multiple>
+
+
+<label>
+Active Product
+</label>
+
+<select id="editActive">
+
+<option value="true">
+Yes - Show on website
+</option>
+
+<option value="false">
+No - Hide from website
+</option>
+
+</select>
+
+
+<button
+class="save"
+onclick="saveEdit()">
+
+💾 Save Changes
+
+</button>
+
+
+<button
+class="cancel"
+onclick="closeEdit()">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://aopxslngvrirrmauvpgp.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rFk4n4FKtkqXOdudodLMlg_3GJ8jypV";
+
+let db;
+
+let allProducts=[];
+
+let allOrders=[];
+
+
+/* =========================
+LOAD SUPABASE
+========================= */
+
+const script =
+document.createElement("script");
+
+script.src =
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+script.onload = async function(){
+
+db =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+checkLogin();
+
+};
+
+document.head.appendChild(script);
+
+
+/* =========================
+LOGIN
+========================= */
+
+async function login(){
+
+const email =
+document.getElementById("email")
+.value.trim();
+
+const password =
+document.getElementById("password")
+.value;
+
+
+if(!email || !password){
+
+document.getElementById(
+"loginMessage"
+).textContent =
+"Email aur password enter karo.";
+
+return;
+
+}
+
+
+const result =
+await db.auth.signInWithPassword({
+
+email:email,
+password:password
+
+});
+
+
+if(result.error){
+
+document.getElementById(
+"loginMessage"
+).textContent =
+"Login failed: " +
+result.error.message;
+
+return;
+
+}
+
+
+checkLogin();
+
+}
+
+
+/* =========================
+CHECK ADMIN
+========================= */
+
+async function checkLogin(){
+
+const userResult =
+await db.auth.getUser();
+
+
+if(!userResult.data.user){
+
+showLogin();
+
+return;
+
+}
+
+
+const user =
+userResult.data.user;
+
+
+const profile =
+await db
+.from("profiles")
+.select("role")
+.eq("id",user.id)
+.single();
+
+
+if(
+profile.error ||
+profile.data.role !== "admin"
+){
+
+await db.auth.signOut();
+
+showLogin();
+
+document.getElementById(
+"loginMessage"
+).textContent =
+"Ye account admin nahi hai.";
+
+return;
+
+}
+
+
+showDashboard();
+
+}
+
+
+/* =========================
+UI
+========================= */
+
+function showLogin(){
+
+document
+.getElementById("loginPage")
+.classList.remove("hidden");
+
+document
+.getElementById("dashboard")
+.classList.add("hidden");
+
+document
+.getElementById("logoutBtn")
+.classList.add("hidden");
+
+}
+
+
+function showDashboard(){
+
+document
+.getElementById("loginPage")
+.classList.add("hidden");
+
+document
+.getElementById("dashboard")
+.classList.remove("hidden");
+
+document
+.getElementById("logoutBtn")
+.classList.remove("hidden");
+
+loadProducts();
+
+loadOrders();
+
+}
+
+
+/* =========================
+IMAGE PREVIEW
+========================= */
+
+function previewImages(){
+
+const files =
+document.getElementById(
+"productImages"
+).files;
+
+const box =
+document.getElementById(
+"imagePreview"
+);
+
+box.innerHTML="";
+
+
+for(const file of files){
+
+const img =
+document.createElement("img");
+
+img.src =
+URL.createObjectURL(file);
+
+box.appendChild(img);
+
+}
+
+}
+
+
+/* =========================
+ADD PRODUCT
+========================= */
+
+async function addProduct(){
+
+const name =
+document.getElementById(
+"productName"
+).value.trim();
+
+const price =
+Number(
+document.getElementById(
+"productPrice"
+).value
+);
+
+const category =
+document.getElementById(
+"productCategory"
+).value.trim();
+
+const emoji =
+document.getElementById(
+"productEmoji"
+).value.trim();
+
+const description =
+document.getElementById(
+"productDescription"
+).value.trim();
+
+const files =
+document.getElementById(
+"productImages"
+).files;
+
+
+if(!name || !price || !category){
+
+alert(
+"Product name, price aur category zaroor fill karo."
+);
+
+return;
+
+}
+
+
+const imageUrls=[];
+
+
+for(let i=0;i<files.length;i++){
+
+const file=files[i];
+
+const fileName =
+Date.now()+
+"-"+
+Math.random()
+.toString(36)
+.substring(2)+
+"-"+
+file.name
+.replace(
+/[^a-zA-Z0-9.-]/g,
+"_"
+);
+
+
+const path =
+productsFolder(fileName);
+
+
+const upload =
+await db.storage
+.from("product-images")
+.upload(
+path,
+file,
+{
+cacheControl:"3600",
+upsert:false,
+contentType:file.type
+}
+);
+
+
+if(upload.error){
+
+alert(
+"Image upload failed: "+
+upload.error.message
+);
+
+return;
+
+}
+
+
+const publicData =
+db.storage
+.from("product-images")
+.getPublicUrl(path);
+
+
+imageUrls.push(
+publicData.data.publicUrl
+);
+
+}
+
+
+const result =
+await db
+.from("products")
+.insert({
+
+name:name,
+price:price,
+category:category,
+emoji:emoji||"🛍️",
+description:description,
+image_urls:imageUrls,
+active:true
+
+});
+
+
+if(result.error){
+
+alert(
+"Product save failed: "+
+result.error.message
+);
+
+return;
+
+}
+
+
+document.getElementById(
+"addMessage"
+).textContent =
+"✅ Product successfully uploaded!";
+
+
+clearForm();
+
+loadProducts();
+
+}
+
+
+/* =========================
+IMAGE PATH
+========================= */
+
+function productsFolder(fileName){
+
+return "products/"+
+crypto.randomUUID()+
+"/"+
+fileName;
+
+}
+
+
+/* =========================
+CLEAR FORM
+========================= */
+
+function clearForm(){
+
+document.getElementById(
+"productName"
+).value="";
+
+document.getElementById(
+"productPrice"
+).value="";
+
+document.getElementById(
+"productCategory"
+).value="";
+
+document.getElementById(
+"productEmoji"
+).value="";
+
+document.getElementById(
+"productDescription"
+).value="";
+
+document.getElementById(
+"productImages"
+).value="";
+
+document.getElementById(
+"imagePreview"
+).innerHTML="";
+
+}
+
+
+/* =========================
+LOAD PRODUCTS
+========================= */
+
+async function loadProducts(){
+
+const result =
+await db
+.from("products")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(result.error){
+
+document.getElementById(
+"products"
+).textContent =
+result.error.message;
+
+return;
+
+}
+
+
+allProducts =
+result.data || [];
+
+renderProducts();
+
+updateStats();
+
+}
+
+
+/* =========================
+RENDER PRODUCTS
+========================= */
+
+function renderProducts(){
+
+const search =
+(document.getElementById(
+"productSearch"
+)?.value || "")
+.toLowerCase();
+
+
+const list =
+allProducts.filter(product => {
+
+return (
+String(product.name||"")
+.toLowerCase()
+.includes(search)
+||
+String(product.category||"")
+.toLowerCase()
+.includes(search)
+);
+
+});
+
+
+if(!list.length){
+
+document.getElementById(
+"products"
+).innerHTML =
+"<div class='empty'>No products found.</div>";
+
+return;
+
+}
+
+
+document.getElementById(
+"products"
+).innerHTML =
+
+list.map(product=>{
+
+const images =
+Array.isArray(product.image_urls)
+?
+product.image_urls
+:
+[];
+
+
+return `
+
+<div class="product ${
+product.active ? "" : "hiddenProduct"
+}">
+
+<div class="productTitle">
+
+<h3>
+
+${escapeHTML(
+product.emoji||"🛍️"
+)}
+
+${escapeHTML(
+product.name
+)}
+
+</h3>
+
+<span class="productStatus ${
+product.active ? "" : "off"
+}">
+
+${
+product.active
+?
+"ACTIVE"
+:
+"HIDDEN"
+}
+
+</span>
+
+</div>
+
+<p>
+
+<b>
+Rs.
+${Number(product.price)
+.toLocaleString("en-PK")}
+</b>
+
+</p>
+
+<p>
+📂 ${escapeHTML(
+product.category
+)}
+</p>
+
+<p>
+${escapeHTML(
+product.description||""
+)}
+</p>
+
+<div class="images">
+
+${
+images.length
+?
+images.map(url=>`
+
+<img
+src="${escapeHTML(url)}"
+onerror="this.style.display='none'">
+
+`).join("")
+:
+"<span>No images</span>"
+}
+
+</div>
+
+<div class="productActions">
+
+<button
+class="edit"
+onclick="openEdit('${product.id}')">
+
+✏️ Edit
+
+</button>
+
+<button
+class="${
+product.active
+?
+"hideBtn"
+:
+"showBtn"
+}"
+onclick="toggleProduct('${product.id}')">
+
+${
+product.active
+?
+"🙈 Hide"
+:
+"👁️ Show"
+}
+
+</button>
+
+<button
+class="delete"
+onclick="deleteProduct('${product.id}')">
+
+🗑️ Delete
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================
+OPEN EDIT
+========================= */
+
+function openEdit(id){
+
+const product =
+allProducts.find(
+p=>String(p.id)===
+String(id)
+);
+
+
+if(!product)return;
+
+
+document.getElementById(
+"editProductId"
+).value =
+product.id;
+
+
+document.getElementById(
+"editName"
+).value =
+product.name||"";
+
+
+document.getElementById(
+"editPrice"
+).value =
+product.price||"";
+
+
+document.getElementById(
+"editCategory"
+).value =
+product.category||"";
+
+
+document.getElementById(
+"editEmoji"
+).value =
+product.emoji||"";
+
+
+document.getElementById(
+"editDescription"
+).value =
+product.description||"";
+
+
+document.getElementById(
+"editActive"
+).value =
+product.active ? "true" : "false";
+
+
+renderEditImages(
+Array.isArray(product.image_urls)
+?
+product.image_urls
+:
+[]
+);
+
+
+document.getElementById(
+"editImageFiles"
+).value="";
+
+
+document.getElementById(
+"editModal"
+).classList.add("show");
+
+}
+
+
+/* =========================
+EDIT IMAGES
+========================= */
+
+let editingImages=[];
+
+
+function renderEditImages(images){
+
+editingImages =
+[...images];
+
+
+const box =
+document.getElementById(
+"editImages"
+);
+
+box.innerHTML="";
+
+
+if(!editingImages.length){
+
+box.innerHTML =
+"<span>No images</span>";
+
+return;
+
+}
+
+
+editingImages.forEach(
+(url,index)=>{
+
+const div =
+document.createElement("div");
+
+
+div.innerHTML=`
+
+<img
+src="${escapeHTML(url)}">
+
+<button
+class="removeImage"
+onclick="removeEditImage(${index})">
+
+✕
+
+</button>
+
+`;
+
+
+box.appendChild(div);
+
+}
+
+);
+
+}
+
+
+function removeEditImage(index){
+
+editingImages.splice(
+index,
+1
+);
+
+renderEditImages(
+editingImages
+);
+
+}
+
+
+/* =========================
+SAVE EDIT
+========================= */
+
+async function saveEdit(){
+
+const id =
+document.getElementById(
+"editProductId"
+).value;
+
+const name =
+document.getElementById(
+"editName"
+).value.trim();
+
+const price =
+Number(
+document.getElementById(
+"editPrice"
+).value
+);
+
+const category =
+document.getElementById(
+"editCategory"
+).value.trim();
+
+const emoji =
+document.getElementById(
+"editEmoji"
+).value.trim();
+
+const description =
+document.getElementById(
+"editDescription"
+).value.trim();
+
+const active =
+document.getElementById(
+"editActive"
+).value === "true";
+
+const files =
+document.getElementById(
+"editImageFiles"
+).files;
+
+
+if(!name || !price || !category){
+
+alert(
+"Name, price aur category zaroor fill karo."
+);
+
+return;
+
+}
+
+
+/* Upload new images */
+
+for(let i=0;i<files.length;i++){
+
+const file =
+files[i];
+
+const fileName =
+Date.now()+
+"-"+
+Math.random()
+.toString(36)
+.substring(2)+
+"-"+
+file.name
+.replace(
+/[^a-zA-Z0-9.-]/g,
+"_"
+);
+
+
+const path =
+productsFolder(fileName);
+
+
+const upload =
+await db.storage
+.from("product-images")
+.upload(
+path,
+file,
+{
+cacheControl:"3600",
+upsert:false,
+contentType:file.type
+}
+);
+
+
+if(upload.error){
+
+alert(
+"New image upload failed: "+
+upload.error.message
+);
+
+return;
+
+}
+
+
+const publicData =
+db.storage
+.from("product-images")
+.getPublicUrl(path);
+
+
+editingImages.push(
+publicData.data.publicUrl
+);
+
+}
+
+
+/* Update product */
+
+const result =
+await db
+.from("products")
+.update({
+
+name:name,
+price:price,
+category:category,
+emoji:emoji||"🛍️",
+description:description,
+image_urls:editingImages,
+active:active
+
+})
+.eq("id",id);
+
+
+if(result.error){
+
+alert(
+"Update failed: "+
+result.error.message
+);
+
+return;
+
+}
+
+
+alert(
+"✅ Product updated successfully!"
+);
+
+closeEdit();
+
+loadProducts();
+
+}
+
+
+/* =========================
+CLOSE EDIT
+========================= */
+
+function closeEdit(){
+
+document.getElementById(
+"editModal"
+).classList.remove("show");
+
+}
+
+
+/* =========================
+TOGGLE PRODUCT
+========================= */
+
+async function toggleProduct(id){
+
+const product =
+allProducts.find(
+p=>String(p.id)===
+String(id)
+);
+
+
+if(!product)return;
+
+
+const result =
+await db
+.from("products")
+.update({
+
+active:!product.active
+
+})
+.eq("id",id);
+
+
+if(result.error){
+
+alert(
+"Status update failed: "+
+result.error.message
+);
+
+return;
+
+}
+
+
+loadProducts();
+
+}
+
+
+/* =========================
+DELETE PRODUCT
+========================= */
+
+async function deleteProduct(id){
+
+if(!confirm(
+"Product permanently delete karna hai?"
+)){
+
+return;
+
+}
+
+
+const result =
+await db
+.from("products")
+.delete()
+.eq("id",id);
+
+
+if(result.error){
+
+alert(
+"Delete failed: "+
+result.error.message
+);
+
+return;
+
+}
+
+
+loadProducts();
+
+}
+
+
+/* =========================
+LOAD ORDERS
+========================= */
+
+async function loadOrders(){
+
+const result =
+await db
+.from("orders")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(result.error){
+
+document.getElementById(
+"orders"
+).textContent =
+result.error.message;
+
+return;
+
+}
+
+
+allOrders =
+result.data || [];
+
+renderOrders();
+
+updateStats();
+
+}
+
+
+/* =========================
+RENDER ORDERS
+========================= */
+
+function renderOrders(){
+
+const search =
+(document.getElementById(
+"orderSearch"
+)?.value || "")
+.toLowerCase();
+
+const filter =
+document.getElementById(
+"orderFilter"
+)?.value || "all";
+
+
+const list =
+allOrders.filter(order=>{
+
+const status =
+order.status || "new";
+
+
+const searchText =
+[
+order.order_id,
+order.customer_name,
+order.customer_phone,
+order.city
+]
+.join(" ")
+.toLowerCase();
+
+
+const searchOK =
+!search ||
+searchText.includes(search);
+
+
+const statusOK =
+filter==="all" ||
+status===filter;
+
+
+return searchOK &&
+statusOK;
+
+});
+
+
+if(!list.length){
+
+document.getElementById(
+"orders"
+).innerHTML =
+"<div class='empty'>No orders found.</div>";
+
+return;
+
+}
+
+
+document.getElementById(
+"orders"
+).innerHTML =
+
+list.map(order=>{
+
+const status =
+order.status || "new";
+
+
+let itemsHTML="";
+
+
+if(Array.isArray(order.items)){
+
+itemsHTML =
+order.items.map(item=>`
+
+<div>
+
+${escapeHTML(
+item.name||"Product"
+)}
+
+ ×
+${item.quantity||1}
+
+ — Rs.
+${Number(item.price||0)
+.toLocaleString("en-PK")}
+
+</div>
+
+`).join("");
+
+}else{
+
+itemsHTML =
+"<div>Order items unavailable.</div>";
+
+}
+
+
+return `
+
+<div class="order">
+
+<div class="orderHeader">
+
+<b>
+Order:
+${escapeHTML(
+order.order_id
+)}
+</b>
+
+<span
+class="status status-${escapeHTML(status)}">
+
+${escapeHTML(
+status.toUpperCase()
+)}
+
+</span>
+
+</div>
+
+<br>
+
+👤
+<b>
+${escapeHTML(
+order.customer_name
+)}
+</b>
+
+<br>
+
+📱
+${escapeHTML(
+order.customer_phone
+)}
+
+<br>
+
+🏠
+${escapeHTML(
+order.address
+)}
+
+<br>
+
+🏙️
+${escapeHTML(
+order.city
+)}
+
+<div class="orderItems">
+
+<b>📦 Items</b>
+
+<br><br>
+
+${itemsHTML}
+
+</div>
+
+<br>
+
+💰
+<b>
+Rs.
+${Number(order.total||0)
+.toLocaleString("en-PK")}
+</b>
+
+<br><br>
+
+<label>
+Order Status
+</label>
+
+<select
+onchange="updateOrderStatus('${order.id}',this.value)">
+
+<option
+value="new"
+${status==="new"?"selected":""}>
+New
+</option>
+
+<option
+value="processing"
+${status==="processing"?"selected":""}>
+Processing
+</option>
+
+<option
+value="shipped"
+${status==="shipped"?"selected":""}>
+Shipped
+</option>
+
+<option
+value="delivered"
+${status==="delivered"?"selected":""}>
+Delivered
+</option>
+
+<option
+value="cancelled"
+${status==="cancelled"?"selected":""}>
+Cancelled
+</option>
+
+</select>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================
+UPDATE ORDER STATUS
+========================= */
+
+async function updateOrderStatus(
+id,
+status
+){
+
+const result =
+await db
+.from("orders")
+.update({
+status:status
+})
+.eq("id",id);
+
+
+if(result.error){
+
+alert(
+"Order status update failed: "+
+result.error.message
+);
+
+return;
+
+}
+
+
+const order =
+allOrders.find(
+o=>String(o.id)===
+String(id)
+);
+
+
+if(order){
+
+order.status=status;
+
+}
+
+
+renderOrders();
+
+updateStats();
+
+}
+
+
+/* =========================
+STATS
+========================= */
+
+function updateStats(){
+
+document.getElementById(
+"productCount"
+).textContent =
+allProducts.length;
+
+
+document.getElementById(
+"orderCount"
+).textContent =
+allOrders.length;
+
+
+const newOrders =
+allOrders.filter(
+o=>(o.status||"new")==="new"
+).length;
+
+
+document.getElementById(
+"newOrderCount"
+).textContent =
+newOrders;
+
+
+const sales =
+allOrders
+.filter(
+o=>(o.status||"new")!=="cancelled"
+)
+.reduce(
+(sum,o)=>
+sum+Number(o.total||0),
+0
+);
+
+
+document.getElementById(
+"salesTotal"
+).textContent =
+"Rs. "+
+sales.toLocaleString("en-PK");
+
+}
+
+
+/* =========================
+LOGOUT
+========================= */
+
+async function logout(){
+
+await db.auth.signOut();
+
+showLogin();
+
+}
+
+
+/* =========================
+SECURITY
+========================= */
+
+function escapeHTML(text){
+
+return String(text)
+.replace(
+/[&<>"']/g,
+function(char){
+
+return {
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+
+}[char];
+
+}
+);
+
+}
+
+</script>
+
+</body>
+</html>
