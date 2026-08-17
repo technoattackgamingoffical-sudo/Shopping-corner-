@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shopping Corner</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f6fa;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:white;
+padding:14px 5%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:10;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+}
+
+button{
+border:0;
+border-radius:9px;
+padding:11px 15px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:active{
+transform:scale(.98);
+}
+
+.cartBtn{
+background:#4f46e5;
+color:white;
+}
+
+.hero{
+background:linear-gradient(135deg,#111827,#3730a3);
+color:white;
+text-align:center;
+padding:70px 20px;
+}
+
+.hero h1{
+font-size:45px;
+margin:10px;
+}
+
+.hero p{
+font-size:18px;
+color:#ddd;
+}
+
+.hero button{
+background:white;
+color:#111827;
+}
+
+.shop{
+max-width:1100px;
+margin:auto;
+padding:40px 18px;
+}
+
+.search{
+width:100%;
+padding:14px;
+font-size:16px;
+border:1px solid #ddd;
+border-radius:10px;
+margin-bottom:20px;
+outline:none;
+}
+
+.search:focus{
+border-color:#4f46e5;
+}
+
+.categories{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:25px;
+}
+
+.categories button{
+background:white;
+border:1px solid #ddd;
+}
+
+.categories button.active{
+background:#4f46e5;
+color:white;
+}
+
+.products{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.product{
+background:white;
+padding:15px;
+border-radius:15px;
+box-shadow:0 4px 15px #0001;
+overflow:hidden;
+}
+
+.productImage{
+height:220px;
+background:#eef0f5;
+border-radius:12px;
+overflow:hidden;
+position:relative;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.productImage img.mainProductImage{
+width:100%;
+height:100%;
+object-fit:contain;
+border-radius:12px;
+}
+
+.productEmoji{
+font-size:70px;
+}
+
+.imageGallery{
+display:flex;
+gap:6px;
+padding:7px 0;
+overflow-x:auto;
+background:white;
+}
+
+.imageGallery::-webkit-scrollbar{
+height:4px;
+}
+
+.imageGallery img{
+width:55px;
+height:55px;
+min-width:55px;
+object-fit:cover;
+border-radius:7px;
+border:2px solid #ddd;
+cursor:pointer;
+}
+
+.imageGallery img.active{
+border-color:#4f46e5;
+}
+
+.product h3{
+margin-bottom:5px;
+}
+
+.productDescription{
+color:#6b7280;
+line-height:1.5;
+}
+
+.price{
+font-size:21px;
+font-weight:bold;
+margin:12px 0;
+}
+
+.add{
+width:100%;
+background:#111827;
+color:white;
+}
+
+.detailsBtn{
+width:100%;
+margin-top:8px;
+background:#eef0f5;
+color:#111827;
+}
+
+.loading{
+text-align:center;
+padding:40px;
+font-weight:bold;
+}
+
+.features{
+background:white;
+margin-top:30px;
+padding:30px 5%;
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(170px,1fr));
+gap:20px;
+text-align:center;
+}
+
+footer{
+background:#111827;
+color:white;
+text-align:center;
+padding:25px;
+margin-top:30px;
+}
+
+
+/* CART */
+
+.cart{
+position:fixed;
+right:-420px;
+top:0;
+width:400px;
+max-width:100%;
+height:100%;
+background:white;
+z-index:30;
+padding:20px;
+box-shadow:-5px 0 20px #0003;
+transition:.3s;
+overflow:auto;
+}
+
+.cart.open{
+right:0;
+}
+
+.cartHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.cartItem{
+display:flex;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid #ddd;
+}
+
+.cartProductImage{
+width:65px;
+height:65px;
+min-width:65px;
+background:#eef0f5;
+border-radius:9px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.cartProductImage img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.cartEmoji{
+font-size:35px;
+}
+
+.cartInfo{
+flex:1;
+}
+
+.qty{
+display:flex;
+align-items:center;
+gap:8px;
+margin-top:8px;
+}
+
+.qty button{
+padding:5px 9px;
+background:#eef0f5;
+}
+
+.removeBtn{
+background:#fee2e2;
+color:#dc2626;
+padding:6px 9px;
+margin-top:8px;
+}
+
+.total{
+font-size:21px;
+font-weight:bold;
+margin:20px 0;
+}
+
+.checkout{
+width:100%;
+background:#4f46e5;
+color:white;
+}
+
+.clearCart{
+width:100%;
+margin-top:8px;
+background:#fee2e2;
+color:#dc2626;
+}
+
+
+/* OVERLAY */
+
+.overlay{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+z-index:20;
+}
+
+.overlay.show{
+display:block;
+}
+
+
+/* MODALS */
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+z-index:50;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modalBox{
+background:white;
+width:500px;
+max-width:100%;
+max-height:90vh;
+overflow:auto;
+padding:25px;
+border-radius:15px;
+}
+
+.modalBox input,
+.modalBox textarea{
+width:100%;
+padding:12px;
+margin:7px 0 12px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:15px;
+outline:none;
+}
+
+.modalBox input:focus,
+.modalBox textarea:focus{
+border-color:#4f46e5;
+}
+
+.modalBox textarea{
+min-height:90px;
+resize:vertical;
+}
+
+.confirm{
+width:100%;
+background:#16a34a;
+color:white;
+}
+
+.cancel{
+width:100%;
+margin-top:10px;
+background:#e5e7eb;
+}
+
+.modalProductImage{
+width:100%;
+height:280px;
+background:#eef0f5;
+border-radius:12px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.modalProductImage img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+
+.modalGallery{
+display:flex;
+gap:7px;
+overflow-x:auto;
+margin-top:8px;
+}
+
+.modalGallery img{
+width:60px;
+height:60px;
+object-fit:cover;
+border-radius:7px;
+cursor:pointer;
+border:2px solid #ddd;
+}
+
+.modalGallery img.active{
+border-color:#4f46e5;
+}
+
+.orderSummary{
+background:#f5f6fa;
+padding:12px;
+border-radius:10px;
+margin:15px 0;
+}
+
+.successMessage{
+text-align:center;
+padding:20px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+.hero{
+padding:50px 15px;
+}
+
+.hero h1{
+font-size:32px;
+}
+
+.logo{
+font-size:18px;
+}
+
+.cart{
+width:100%;
+}
+
+.products{
+grid-template-columns:
+repeat(2,1fr);
+gap:12px;
+}
+
+.product{
+padding:10px;
+}
+
+.productImage{
+height:170px;
+}
+
+.product h3{
+font-size:16px;
+}
+
+.price{
+font-size:18px;
+}
+
+}
+
+@media(max-width:400px){
+
+.products{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">
+🛍️ Shopping Corner
+</div>
+
+<button
+class="cartBtn"
+onclick="openCart()">
+
+🛒 Cart
+(<span id="cartCount">0</span>)
+
+</button>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1>
+Shopping Corner
+</h1>
+
+<p>
+Everything you need, all in one place.
+</p>
+
+<button
+onclick="document
+.getElementById('shop')
+.scrollIntoView({behavior:'smooth'})">
+
+Shop Now
+
+</button>
+
+</section>
+
+
+<!-- SHOP -->
+
+<section
+class="shop"
+id="shop">
+
+<input
+class="search"
+id="search"
+placeholder="🔎 Search products..."
+oninput="showProducts()"
+>
+
+<div
+class="categories"
+id="categories">
+</div>
+
+<div
+class="products"
+id="products">
+
+<div class="loading">
+Loading products...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+<div>
+🚚
+<br>
+<b>Fast Delivery</b>
+<br>
+<small>Quick delivery</small>
+</div>
+
+<div>
+🔒
+<br>
+<b>Secure Shopping</b>
+<br>
+<small>Safe checkout</small>
+</div>
+
+<div>
+↩️
+<br>
+<b>Easy Returns</b>
+<br>
+<small>Simple returns</small>
+</div>
+
+<div>
+💬
+<br>
+<b>Customer Support</b>
+<br>
+<small>We're here to help</small>
+</div>
+
+</section>
+
+
+<footer>
+
+© 2026 Shopping Corner
+
+</footer>
+
+
+<!-- OVERLAY -->
+
+<div
+id="overlay"
+class="overlay"
+onclick="closeCart()">
+</div>
+
+
+<!-- CART -->
+
+<div
+id="cart"
+class="cart">
+
+<div class="cartHeader">
+
+<h2>
+🛒 Your Cart
+</h2>
+
+<button
+onclick="closeCart()">
+
+✕
+
+</button>
+
+</div>
+
+<div id="cartItems">
+</div>
+
+<div class="total">
+
+Total:
+Rs.
+<span id="cartTotal">
+0
+</span>
+
+</div>
+
+<button
+class="checkout"
+onclick="openCheckout()">
+
+📲 Buy / Checkout
+
+</button>
+
+<button
+class="clearCart"
+onclick="clearCart()">
+
+🗑️ Clear Cart
+
+</button>
+
+</div>
+
+
+<!-- PRODUCT DETAILS -->
+
+<div
+id="productModal"
+class="modal">
+
+<div class="modalBox">
+
+<button
+onclick="closeProductModal()"
+style="float:right">
+
+✕
+
+</button>
+
+<div id="productDetails">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CHECKOUT -->
+
+<div
+id="checkoutModal"
+class="modal">
+
+<div class="modalBox">
+
+<h2>
+🛍️ Confirm Your Order
+</h2>
+
+<p>
+Apni delivery details fill karein:
+</p>
+
+
+<label>
+Full Name
+</label>
+
+<input
+id="customerName"
+placeholder="Apna naam"
+autocomplete="name"
+>
+
+
+<label>
+Phone / WhatsApp Number
+</label>
+
+<input
+id="customerPhone"
+type="tel"
+placeholder="03001234567"
+autocomplete="tel"
+>
+
+
+<label>
+Complete Address
+</label>
+
+<textarea
+id="customerAddress"
+placeholder="House, street, area"
+autocomplete="street-address">
+</textarea>
+
+
+<label>
+City
+</label>
+
+<input
+id="customerCity"
+placeholder="City"
+autocomplete="address-level2"
+>
+
+
+<div class="orderSummary">
+
+<div class="total">
+
+Order Total:
+Rs.
+<span id="checkoutTotal">
+0
+</span>
+
+</div>
+
+</div>
+
+
+<button
+class="confirm"
+onclick="placeOrder()">
+
+📲 Confirm Order on WhatsApp
+
+</button>
+
+
+<button
+class="cancel"
+onclick="closeCheckout()">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL=
+"https://aopxslngvrirrmauvpgp.supabase.co";
+
+const SUPABASE_KEY=
+"sb_publishable_rFk4n4FKtkqXOdudodLMlg_3GJ8jypV";
+
+
+/* =========================
+   WHATSAPP
+========================= */
+
+const WHATSAPP_NUMBER=
+"923026756346";
+
+
+/* =========================
+   PRODUCTS + CART
+========================= */
+
+let products=[];
+
+let cart=[];
+
+let selectedCategory="All";
+
+
+/* =========================
+   SUPABASE CONNECTION
+========================= */
+
+const script=
+document.createElement("script");
+
+script.src=
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+script.onload=function(){
+
+window.database=
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+loadSavedCart();
+
+loadProducts();
+
+};
+
+script.onerror=function(){
+
+document.getElementById(
+"products"
+).innerHTML=
+"<p>Supabase connection failed.</p>";
+
+};
+
+document.head.appendChild(script);
+
+
+/* =========================
+   LOAD PRODUCTS
+========================= */
+
+async function loadProducts(){
+
+const result=
+await database
+.from("products")
+.select("*")
+.eq("active",true)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(result.error){
+
+console.log(result.error);
+
+document.getElementById(
+"products"
+).innerHTML=
+"<p>Products load nahi ho sake.</p>";
+
+return;
+
+}
+
+
+products=
+result.data || [];
+
+showCategories();
+
+showProducts();
+
+updateCart();
+
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+function showCategories(){
+
+let categories=[
+"All",
+...new Set(
+products
+.map(p=>p.category)
+.filter(Boolean)
+)
+];
+
+
+if(
+selectedCategory!=="All" &&
+!categories.includes(selectedCategory)
+){
+
+selectedCategory="All";
+
+}
+
+
+document.getElementById(
+"categories"
+).innerHTML=
+
+categories.map(
+
+category=>`
+
+<button
+class="${
+category===
+selectedCategory
+?
+"active"
+:
+""
+}"
+onclick="selectCategory('${escapeAttribute(category)}')">
+
+${escapeHTML(category)}
+
+</button>
+
+`
+
+).join("");
+
+}
+
+
+/* =========================
+   PRODUCTS
+========================= */
+
+function showProducts(){
+
+const searchElement=
+document.getElementById("search");
+
+const search=
+searchElement
+?
+searchElement.value
+.toLowerCase()
+.trim()
+:
+"";
+
+
+let list=
+products.filter(
+
+product=>{
+
+let categoryOK=
+selectedCategory===
+"All"
+||
+product.category===
+selectedCategory;
+
+
+let name=
+String(product.name || "")
+.toLowerCase();
+
+
+let description=
+String(product.description || "")
+.toLowerCase();
+
+
+let searchOK=
+name.includes(search)
+||
+description.includes(search);
+
+
+return categoryOK &&
+searchOK;
+
+}
+
+);
+
+
+const container=
+document.getElementById("products");
+
+
+if(!list.length){
+
+container.innerHTML=
+"<p>No products found.</p>";
+
+return;
+
+}
+
+
+container.innerHTML=
+
+list.map(
+
+product=>{
+
+const images=
+Array.isArray(product.image_urls)
+?
+product.image_urls
+:
+[];
+
+
+return `
+
+<div class="product">
+
+<div class="productImage">
+
+${
+images.length>0
+?
+`<img
+id="main-img-${escapeAttribute(product.id)}"
+class="mainProductImage"
+src="${escapeAttribute(images[0])}"
+alt="${escapeAttribute(product.name)}"
+onerror="this.style.display='none';"
+>`
+:
+`<span class="productEmoji">
+${escapeHTML(product.emoji || "🛍️")}
+</span>`
+}
+
+</div>
+
+
+${
+images.length>1
+?
+`<div class="imageGallery">
+
+${images.map(
+(url,index)=>`
+
+<img
+src="${escapeAttribute(url)}"
+class="${index===0?"active":""}"
+alt="Product image"
+onclick="changeProductImage('${escapeAttribute(product.id)}','${escapeAttribute(url)}',this)"
+onerror="this.style.display='none';"
+>
+
+`
+).join("")}
+
+</div>`
+:
+""
+}
+
+
+<h3>
+${escapeHTML(product.name)}
+</h3>
+
+<small>
+${escapeHTML(product.category || "")}
+</small>
+
+<p class="productDescription">
+${escapeHTML(product.description || "")}
+</p>
+
+<div class="price">
+Rs.
+${money(product.price)}
+</div>
+
+<button
+class="add"
+onclick="addToCart('${escapeAttribute(product.id)}')">
+
+🛒 Add to Cart
+
+</button>
+
+<button
+class="detailsBtn"
+onclick="openProductDetails('${escapeAttribute(product.id)}')">
+
+👁️ View Details
+
+</button>
+
+</div>
+
+`;
+
+}
+
+).join("");
+
+}
+
+
+/* =========================
+   IMAGE CHANGE
+========================= */
+
+function changeProductImage(
+id,
+url,
+thumbnail
+){
+
+const mainImage=
+document.getElementById(
+"main-img-"+id
+);
+
+
+if(!mainImage)return;
+
+
+mainImage.src=url;
+
+
+const gallery=
+thumbnail.parentElement;
+
+
+gallery
+.querySelectorAll("img")
+.forEach(img=>{
+
+img.classList.remove("active");
+
+});
+
+
+thumbnail.classList.add("active");
+
+}
+
+
+/* =========================
+   PRODUCT DETAILS
+========================= */
+
+function openProductDetails(id){
+
+const product=
+products.find(
+p=>String(p.id)===
+String(id)
+);
+
+
+if(!product)return;
+
+
+const images=
+Array.isArray(product.image_urls)
+?
+product.image_urls
+:
+[];
+
+
+const box=
+document.getElementById(
+"productDetails"
+);
+
+
+box.innerHTML=`
+
+<div class="modalProductImage">
+
+${
+images.length
+?
+`<img
+id="detailMainImage"
+src="${escapeAttribute(images[0])}"
+alt="${escapeAttribute(product.name)}"
+>`
+:
+`<span class="productEmoji">
+${escapeHTML(product.emoji || "🛍️")}
+</span>`
+}
+
+</div>
+
+
+${
+images.length>1
+?
+`<div class="modalGallery">
+
+${images.map(
+(url,index)=>`
+
+<img
+src="${escapeAttribute(url)}"
+class="${index===0?"active":""}"
+onclick="changeDetailImage('${escapeAttribute(url)}',this)"
+>
+
+`
+).join("")}
+
+</div>`
+:
+""
+}
+
+
+<h2>
+${escapeHTML(product.name)}
+</h2>
+
+<p>
+<b>Category:</b>
+${escapeHTML(product.category || "")}
+</p>
+
+<p class="productDescription">
+${escapeHTML(product.description || "No description available.")}
+</p>
+
+<div class="price">
+Rs.
+${money(product.price)}
+</div>
+
+<button
+class="add"
+onclick="addToCart('${escapeAttribute(product.id)}');closeProductModal();">
+
+🛒 Add to Cart
+
+</button>
+
+`;
+
+
+document
+.getElementById("productModal")
+.classList.add("show");
+
+}
+
+
+function changeDetailImage(
+url,
+thumbnail
+){
+
+const main=
+document.getElementById(
+"detailMainImage"
+);
+
+
+if(!main)return;
+
+
+main.src=url;
+
+
+thumbnail
+.parentElement
+.querySelectorAll("img")
+.forEach(img=>{
+
+img.classList.remove("active");
+
+});
+
+
+thumbnail.classList.add("active");
+
+}
+
+
+function closeProductModal(){
+
+document
+.getElementById("productModal")
+.classList.remove("show");
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function money(number){
+
+return Number(number || 0)
+.toLocaleString("en-PK");
+
+}
+
+
+function escapeHTML(text){
+
+return String(text ?? "")
+.replace(
+/[&<>"']/g,
+function(char){
+
+return {
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+
+}[char];
+
+}
+);
+
+}
+
+
+/*
+Safe attribute escaping
+*/
+
+function escapeAttribute(text){
+
+return String(text ?? "")
+.replace(/&/g,"&amp;")
+.replace(/'/g,"&#039;")
+.replace(/"/g,"&quot;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+function selectCategory(category){
+
+selectedCategory=
+category;
+
+showCategories();
+
+showProducts();
+
+}
+
+
+/* =========================
+   CART STORAGE
+========================= */
+
+function saveCart(){
+
+try{
+
+localStorage.setItem(
+"shopping_corner_cart",
+JSON.stringify(cart)
+);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+
+function loadSavedCart(){
+
+try{
+
+const saved=
+localStorage.getItem(
+"shopping_corner_cart"
+);
+
+
+if(saved){
+
+cart=
+JSON.parse(saved);
+
+if(!Array.isArray(cart)){
+
+cart=[];
+
+}
+
+}
+
+}catch(error){
+
+cart=[];
+
+}
+
+updateCart();
+
+}
+
+
+/* =========================
+   CART
+========================= */
+
+function addToCart(id){
+
+const item=
+cart.find(
+x=>String(x.id)===
+String(id)
+);
+
+
+if(item){
+
+item.qty++;
+
+}else{
+
+cart.push({
+
+id:id,
+
+qty:1
+
+});
+
+}
+
+
+saveCart();
+
+updateCart();
+
+openCart();
+
+}
+
+
+function updateCart(){
+
+let total=0;
+
+let html="";
+
+
+if(!cart.length){
+
+html=
+"<p>Your cart is empty.</p>";
+
+}else{
+
+cart.forEach(
+
+item=>{
+
+const product=
+products.find(
+p=>String(p.id)===
+String(item.id)
+);
+
+
+if(!product)return;
+
+
+const itemTotal=
+Number(product.price)*
+item.qty;
+
+
+total+=itemTotal;
+
+
+const images=
+Array.isArray(product.image_urls)
+?
+product.image_urls
+:
+[];
+
+
+html+=`
+
+<div class="cartItem">
+
+<div class="cartProductImage">
+
+${
+images.length
+?
+`<img
+src="${escapeAttribute(images[0])}"
+alt="${escapeAttribute(product.name)}"
+>`
+:
+escapeHTML(product.emoji || "🛍️")
+}
+
+</div>
+
+
+<div class="cartInfo">
+
+<b>
+${escapeHTML(product.name)}
+</b>
+
+<br>
+
+Rs.
+${money(product.price)}
+
+
+<div class="qty">
+
+<button
+onclick="changeQty('${escapeAttribute(product.id)}',-1)">
+
+−
+
+</button>
+
+<span>
+${item.qty}
+</span>
+
+<button
+onclick="changeQty('${escapeAttribute(product.id)}',1)">
+
++
+
+</button>
+
+</div>
+
+
+<button
+class="removeBtn"
+onclick="removeFromCart('${escapeAttribute(product.id)}')">
+
+🗑️ Remove
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+);
+
+}
+
+
+document.getElementById(
+"cartItems"
+).innerHTML=html;
+
+
+document.getElementById(
+"cartTotal"
+).textContent=
+money(total);
+
+
+document.getElementById(
+"cartCount"
+).textContent=
+
+cart.reduce(
+(sum,item)=>
+sum+Number(item.qty || 0),
+0
+);
+
+
+saveCart();
+
+}
+
+
+function changeQty(
+id,
+amount
+){
+
+const item=
+cart.find(
+x=>String(x.id)===
+String(id)
+);
+
+
+if(!item)return;
+
+
+item.qty+=amount;
+
+
+if(item.qty<=0){
+
+cart=
+cart.filter(
+x=>String(x.id)!==
+String(id)
+);
+
+}
+
+
+saveCart();
+
+updateCart();
+
+}
+
+
+function removeFromCart(id){
+
+cart=
+cart.filter(
+x=>String(x.id)!==
+String(id)
+);
+
+saveCart();
+
+updateCart();
+
+}
+
+
+function clearCart(){
+
+if(!cart.length)return;
+
+
+if(!confirm(
+"Cart clear karna hai?"
+)){
+
+return;
+
+}
+
+
+cart=[];
+
+saveCart();
+
+updateCart();
+
+}
+
+
+/* =========================
+   CART OPEN/CLOSE
+========================= */
+
+function openCart(){
+
+document
+.getElementById("cart")
+.classList.add("open");
+
+
+document
+.getElementById("overlay")
+.classList.add("show");
+
+}
+
+
+function closeCart(){
+
+document
+.getElementById("cart")
+.classList.remove("open");
+
+
+document
+.getElementById("overlay")
+.classList.remove("show");
+
+}
+
+
+/* =========================
+   CHECKOUT
+========================= */
+
+function openCheckout(){
+
+if(!cart.length){
+
+alert(
+"Your cart is empty!"
+);
+
+return;
+
+}
+
+
+document.getElementById(
+"checkoutTotal"
+).textContent=
+document.getElementById(
+"cartTotal"
+).textContent;
+
+
+document
+.getElementById("checkoutModal")
+.classList.add("show");
+
+}
+
+
+function closeCheckout(){
+
+document
+.getElementById("checkoutModal")
+.classList.remove("show");
+
+}
+
+
+/* =========================
+   PHONE VALIDATION
+========================= */
+
+function validPhone(phone){
+
+const clean=
+phone.replace(
+/[\s\-()]/g,
+""
+);
+
+
+return /^(\+92|92|03)\d{9}$/.test(
+clean
+);
+
+}
+
+
+/* =========================
+   PLACE ORDER
+========================= */
+
+async function placeOrder(){
+
+const name=
+document.getElementById(
+"customerName"
+).value.trim();
+
+
+const phone=
+document.getElementById(
+"customerPhone"
+).value.trim();
+
+
+const address=
+document.getElementById(
+"customerAddress"
+).value.trim();
+
+
+const city=
+document.getElementById(
+"customerCity"
+).value.trim();
+
+
+if(
+!name ||
+!phone ||
+!address ||
+!city
+){
+
+alert(
+"Please Name, Phone, Address aur City fill karein."
+);
+
+return;
+
+}
+
+
+if(!validPhone(phone)){
+
+alert(
+"Please valid Pakistani phone number enter karein."
+);
+
+return;
+
+}
+
+
+let total=0;
+
+let items=[];
+
+let messageItems=[];
+
+
+cart.forEach(
+
+cartItem=>{
+
+const product=
+products.find(
+p=>String(p.id)===
+String(cartItem.id)
+);
+
+
+if(!product)return;
+
+
+const itemTotal=
+Number(product.price)*
+Number(cartItem.qty);
+
+
+total+=itemTotal;
+
+
+items.push({
+
+id:product.id,
+
+name:product.name,
+
+quantity:cartItem.qty,
+
+price:product.price
+
+});
+
+
+messageItems.push(
+
+"• "+
+product.name+
+" x"+
+cartItem.qty+
+" — Rs. "+
+money(itemTotal)
+
+);
+
+}
+
+);
+
+
+if(!items.length){
+
+alert(
+"Cart mein valid products nahi hain."
+);
+
+return;
+
+}
+
+
+const orderId=
+"SC-"+
+Date.now()
+.toString()
+.slice(-8);
+
+
+const message=
+
+"🛍️ *NEW SHOPPING CORNER ORDER*\n\n"+
+
+"📋 Order ID: "+
+orderId+
+"\n"+
+
+"👤 Name: "+
+name+
+"\n"+
+
+"📱 Phone: "+
+phone+
+"\n"+
+
+"🏠 Address: "+
+address+
+"\n"+
+
+"🏙️ City: "+
+city+
+"\n\n"+
+
+"📦 *ORDER ITEMS*\n"+
+
+messageItems.join("\n")+
+
+"\n\n"+
+
+"💰 *TOTAL: Rs. "+
+money(total)+
+"*\n\n"+
+
+"Thank you for shopping with Shopping Corner!";
+
+
+/* SAVE ORDER */
+
+if(
+window.database
+){
+
+const result=
+await database
+.from("orders")
+.insert({
+
+order_id:orderId,
+
+customer_name:name,
+
+customer_phone:phone,
+
+address:address,
+
+city:city,
+
+items:items,
+
+total:total,
+
+status:"new"
+
+});
+
+
+if(result.error){
+
+console.log(
+result.error
+);
+
+alert(
+"Order save nahi ho saka. Please dobara try karein."
+);
+
+return;
+
+}
+
+}
+
+
+/* WHATSAPP */
+
+const whatsappURL=
+
+"https://wa.me/"+
+WHATSAPP_NUMBER+
+"?text="+
+encodeURIComponent(message);
+
+
+window.open(
+whatsappURL,
+"_blank"
+);
+
+
+/* CLEAR */
+
+cart=[];
+
+saveCart();
+
+updateCart();
+
+closeCheckout();
+
+closeCart();
+
+
+/* CLEAR CUSTOMER FORM */
+
+document.getElementById(
+"customerName"
+).value="";
+
+document.getElementById(
+"customerPhone"
+).value="";
+
+document.getElementById(
+"customerAddress"
+).value="";
+
+document.getElementById(
+"customerCity"
+).value="";
+
+
+alert(
+"Order ready hai! WhatsApp mein Send button dabayein."
+);
+
+}
+
+
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
+
+document
+.getElementById("productModal")
+.addEventListener(
+"click",
+function(event){
+
+if(event.target===this){
+
+closeProductModal();
+
+}
+
+}
+);
+
+
+document
+.getElementById("checkoutModal")
+.addEventListener(
+"click",
+function(event){
+
+if(event.target===this){
+
+closeCheckout();
+
+}
+
+}
+);
+
+
+/* =========================
+   START
+========================= */
+
+updateCart();
+
+</script>
+
+</body>
+</html>
